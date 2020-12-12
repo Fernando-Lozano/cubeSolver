@@ -1,2 +1,1 @@
-if "r" is "r":
-    print("is")
+print(1 % 2)

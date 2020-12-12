@@ -44,59 +44,86 @@ print()
 algorithms = []
 
 # search for algorithms - max 11 moves
-def searchAlgs(scrambledCube, solvedCube, edgeCounter=0, prevMove="", alg="", algList=algorithms):
+def searchAlgs(cube1, cube2, prevMove1="", prevMove2="", alg1="", alg2="", edgeCounter=0, algList=algorithms):
     # create max 11 case
-    if edgeCounter == 8:
+    if edgeCounter == 7:
         return
     # create base case
-    if isMatch(scrambledCube, solvedCube):
-        algList.append(alg)
+    if isMatch(cube1, cube2):
+        algList.append(alg1 + alg2.swapcase()[::-1])
         return
+    
+    # determines which cube to permutate next
+    if edgeCounter % 2 != 0:
+        prevMove = prevMove2
+        secondCube = True
+    else:
+        prevMove = prevMove1
+        secondCube = False
+
     # prevMove prevents redundant moves
     if prevMove != "R":
-        cubePath1 = copy.deepcopy(scrambledCube)
-        rightTurn(cubePath1)
-        algPath1 = alg + "r"
-        counter1 = edgeCounter + 1
-        searchAlgs(cubePath1, solvedCube, counter1, "r", algPath1)
+        if secondCube:
+            cubePath1 = copy.deepcopy(cube2)
+            algPath1 = alg2 + rightTurn(cubePath1)
+            searchAlgs(cube1, cubePath1, prevMove1, "r", alg1, algPath1, edgeCounter + 1)
+        else:
+            cubePath1 = copy.deepcopy(cube1)
+            algPath1 = alg1 + rightTurn(cubePath1)
+            searchAlgs(cubePath1, cube2, "r", prevMove2, algPath1, alg2, edgeCounter + 1)
     # prevMove prevents redundant moves
     if prevMove != "r":
-        cubePath2 = copy.deepcopy(scrambledCube)
-        rightTurn(cubePath2, False)
-        algPath2 = alg + "R"
-        counter2 = edgeCounter + 1
-        searchAlgs(cubePath2, solvedCube, counter2, "R", algPath2)
+        if secondCube:
+            cubePath2 = copy.deepcopy(cube2)
+            algPath2 = alg2 + rightTurn(cubePath2, False)
+            searchAlgs(cube1, cubePath2, prevMove1, "R", alg1, algPath2, edgeCounter + 1)
+        else:
+            cubePath2 = copy.deepcopy(cube1)
+            algPath2 = alg1 + rightTurn(cubePath2, False)
+            searchAlgs(cubePath2, cube2, "R", prevMove2, algPath2, alg2,  edgeCounter + 1)
     # prevMove prevents redundant moves
     if prevMove != "B":
-        cubePath3 = copy.deepcopy(scrambledCube)
-        backTurn(cubePath3)
-        algPath3 = alg + "b"
-        counter3 = edgeCounter + 1
-        searchAlgs(cubePath3, solvedCube, counter3, "b", algPath3)
+        if secondCube:
+            cubePath3 = copy.deepcopy(cube2)
+            algPath3 = alg2 + backTurn(cubePath3)
+            searchAlgs(cube1, cubePath3, prevMove1, "b", alg1, algPath3, edgeCounter + 1)
+        else:
+            cubePath3 = copy.deepcopy(cube1)
+            algPath3 = alg1 + backTurn(cubePath3)
+            searchAlgs(cubePath3, cube2, "b", prevMove2, algPath3, alg2, edgeCounter + 1)
     # prevMove prevents redundant moves
     if prevMove != "b":
-        cubePath4 = copy.deepcopy(scrambledCube)
-        backTurn(cubePath4, False)
-        algPath4 = alg + "B"
-        counter4 = edgeCounter + 1
-        searchAlgs(cubePath4, solvedCube, counter4, "B", algPath4)
+        if secondCube:
+            cubePath4 = copy.deepcopy(cube2)
+            algPath4 = alg2 + backTurn(cubePath4, False)
+            searchAlgs(cube1, cubePath4, prevMove1, "B", alg1, algPath4, edgeCounter + 1)
+        else:
+            cubePath4 = copy.deepcopy(cube1)
+            algPath4 = alg1 + backTurn(cubePath4, False)
+            searchAlgs(cubePath4, cube2, "B", prevMove2, algPath4, alg2, edgeCounter + 1)
     # prevMove prevents redundant moves
     if prevMove != "D":
-        cubePath5 = copy.deepcopy(scrambledCube)
-        bottomTurn(cubePath5)
-        algPath5 = alg + "d"
-        counter5 = edgeCounter + 1
-        searchAlgs(cubePath5, solvedCube, counter5, "d", algPath5)
+        if secondCube:
+            cubePath5 = copy.deepcopy(cube2)
+            algPath5 = alg2 + bottomTurn(cubePath5)
+            searchAlgs(cube1, cubePath5, prevMove1, "d", alg1, algPath5, edgeCounter + 1)
+        else:
+            cubePath5 = copy.deepcopy(cube1)
+            algPath5 = alg1 + bottomTurn(cubePath5)
+            searchAlgs(cubePath5, cube2, "d", prevMove2, algPath5, alg2, edgeCounter + 1)
     # prevMove prevents redundant moves
     if prevMove != "d":
-        cubePath6 = copy.deepcopy(scrambledCube)
-        bottomTurn(cubePath6, False)
-        algPath6 = alg + "D"
-        counter6 = edgeCounter + 1
-        searchAlgs(cubePath6, solvedCube, counter6, "D", algPath6)
+        if secondCube:
+            cubePath6 = copy.deepcopy(cube2)
+            algPath6 = alg2 + bottomTurn(cubePath6, False)
+            searchAlgs(cube1, cubePath6, prevMove1, "D", alg1, algPath6, edgeCounter + 1)
+        else:
+            cubePath6 = copy.deepcopy(cube1)
+            algPath6 = alg1 + bottomTurn(cubePath6, False)
+            searchAlgs(cubePath6, cube2, "D", prevMove2, algPath6, alg2, edgeCounter + 1)
 
 searchAlgs(scrambledCube, solvedCube)
 
 # sort algorithm list from smalled to biggest
-# print algorithms to screen
+algorithms.sort(key=lambda e : len(e))
 print(algorithms)
