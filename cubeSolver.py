@@ -39,7 +39,7 @@ scrambler(scrambledCube, scramble)
 # print scrambled cube to screen
 print()
 printCube(scrambledCube)
-
+print()
 # list of algorithms used
 algorithms = []
 
@@ -98,6 +98,5 @@ def searchAlgs(scrambledCube, solvedCube, edgeCounter=0, prevMove="", alg="", al
 searchAlgs(scrambledCube, solvedCube)
 
 # sort algorithm list from smalled to biggest
-algorithms.sort()
 # print algorithms to screen
 print(algorithms)
