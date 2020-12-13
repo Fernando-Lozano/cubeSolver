@@ -202,8 +202,8 @@ def isMatch(cube1, cube2):
                     return False
     return True
 
-# scrambles cube
-def scrambler(cube, algorithm):
+# performs algorithm on cube
+def performAlg(cube, algorithm):
     for letter in algorithm:
         if letter == "r":
             rightTurn(cube)
