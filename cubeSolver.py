@@ -6,7 +6,7 @@
 
 from helper import *
 from os import sys
-import copy
+import copy, itertools
 
 # make a scrambled cube
 scrambledCube = copy.deepcopy(solvedCube)
@@ -43,14 +43,15 @@ printCube(scrambledCube)
 print()
 # list of algorithms used
 
-def generateAlgs(alg="", cube1=scrambledCube, cube2=solvedCube):
-        for letter in "rRdDbB":
-            alg1 = alg + letter
-            cubeCopy = copy.deepcopy(scrambledCube)
-            performAlg(cubeCopy, alg1)
-            if isMatch(cubeCopy, solvedCube):
-                print(alg1)
+def generateAlgs(cube1=scrambledCube, cube2=solvedCube):
+    # provides all combinations starting with shortest length
+    for count in range(1, 15):
+        for characters in itertools.product("rRdDbB", repeat=count):
+            algorithm = ''.join(characters)
+            copyCube = copy.deepcopy(scrambledCube)
+            performAlg(copyCube, algorithm)
+            if isMatch(copyCube, cube2):
+                print(algorithm)
                 sys.exit()
-        for letter in "rRdDbB":
-            generateAlgs(alg+letter)
+
 generateAlgs()
