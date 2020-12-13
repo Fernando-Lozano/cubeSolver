@@ -1,7 +1,6 @@
 #! python3
-# cubeSolver.py - A program to find algorithms to solve a 
+# cubeSolver.py - A program to find shortest algorithm to solve the 
 # 2x2 rubiks cube
-# printed result will be as if a 2d cube was flattened
 # lower case == clockwise, upper case == counter-clockwise
 
 from helper import *
@@ -41,17 +40,39 @@ performAlg(scrambledCube, scramble)
 print()
 printCube(scrambledCube)
 print()
-# list of algorithms used
 
-def generateAlgs(cube1=scrambledCube, cube2=solvedCube):
+def generateAlg(cube1=scrambledCube, cube2=solvedCube):
     # provides all combinations starting with shortest length
-    for count in range(1, 15):
-        for characters in itertools.product("rRdDbB", repeat=count):
-            algorithm = ''.join(characters)
-            copyCube = copy.deepcopy(scrambledCube)
-            performAlg(copyCube, algorithm)
-            if isMatch(copyCube, cube2):
-                print(algorithm)
-                sys.exit()
-
-generateAlgs()
+    for count in range(1, 8):
+        print(f"Depth {count}...")
+        for characters1 in itertools.product("rRdDbB", repeat=count):
+            alg1 = ''.join(characters1)
+            copyScrambled = copy.deepcopy(scrambledCube)
+            performAlg(copyScrambled, alg1)
+            if count == 1:
+                if isMatch(copyScrambled, cube2):
+                    print(f"Found: {alg1}")
+                    sys.exit()
+                for characters2 in itertools.product("rRdDbB", repeat=count):
+                    alg2 = ''.join(characters2)
+                    copySolved = copy.deepcopy(solvedCube)
+                    performAlg(copySolved, alg2)
+                    if isMatch(copyScrambled, copySolved):
+                        print(f"Found: {alg1}{alg2.swapcase()[::-1]}")
+                        sys.exit()
+            else:
+                for characters2 in itertools.product("rRdDbB", repeat=count-1):
+                    alg2 = ''.join(characters2)
+                    copySolved = copy.deepcopy(solvedCube)
+                    performAlg(copySolved, alg2)
+                    if isMatch(copyScrambled, copySolved):
+                        print(f"Found: {alg1}{alg2.swapcase()[::-1]}")
+                        sys.exit()
+                for characters2 in itertools.product("rRdDbB", repeat=count):
+                    alg2 = ''.join(characters2)
+                    copySolved = copy.deepcopy(solvedCube)
+                    performAlg(copySolved, alg2)
+                    if isMatch(copyScrambled, copySolved):
+                        print(f"Found: {alg1}{alg2.swapcase()[::-1]}")
+                        sys.exit()
+generateAlg()

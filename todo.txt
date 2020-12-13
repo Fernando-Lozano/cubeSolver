@@ -1,2 +1,0 @@
-implement something more effecient that involves searching from both ends
-sort results
